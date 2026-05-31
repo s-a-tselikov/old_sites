@@ -1,16 +1,10 @@
-# Static site: https://render.com/docs/static-sites
-# В Render: New → Static Site → репозиторий old_sites, ветка przdnt.
+# Один Web Service: статика przdnt.com + POST /api/contact (Hover SMTP).
+# В Render: Blueprint или New → Web Service, репозиторий old_sites, ветка przdnt.
+# Если был Static Site old-sites — замените на Web Service с этими настройками
+# (или создайте новый Web Service и удалите static).
 services:
   - type: web
-    name: przdnt
-    runtime: static
-    branch: przdnt
-    buildCommand: ""
-    staticPublishPath: .
-
-  # API формы → Hover SMTP (info@timeto.show), без Gmail OAuth
-  - type: web
-    name: przdnt-contact
+    name: old-sites
     runtime: node
     branch: przdnt
     rootDir: contact-api
@@ -24,11 +18,11 @@ services:
       - key: SMTP_USER
         value: info@timeto.show
       - key: CONTACT_TO
-        value: info@timeto.show
+        value: s.a.tselikov@gmail.com
       - key: CONTACT_FROM
         value: info@timeto.show
       - key: CONTACT_FROM_NAME
-        value: timeto.show
+        value: 'Форма обратной связи'
       - key: CONTACT_SUBJECT_PREFIX
         value: 'Спектакль "Ложитесь, господин президент!" — przdnt.com'
       - key: SMTP_PASS

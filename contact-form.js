@@ -284,7 +284,11 @@
         true
       );
     } catch (sendError) {
-      setStatus(form, sendError.message || 'Ошибка отправки. Попробуйте позже.');
+      var msg = sendError.message || 'Ошибка отправки. Попробуйте позже.';
+      if (msg === 'Failed to fetch') {
+        msg = 'Не удалось связаться с сервером формы. Попробуйте позже.';
+      }
+      setStatus(form, msg);
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;

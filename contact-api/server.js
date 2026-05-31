@@ -15,6 +15,7 @@
 
 'use strict';
 
+const path = require('path');
 const express = require('express');
 const nodemailer = require('nodemailer');
 
@@ -213,17 +214,7 @@ app.use(cors);
 app.options('*', (_req, res) => res.sendStatus(204));
 app.use(express.text({ type: ['text/plain', 'application/json'], limit: '64kb' }));
 
-app.get('/', (_req, res) => {
-  json(res, 200, {
-    ok: true,
-    service: 'przdnt-contact',
-    version: CONFIG.contactApiVersion,
-    transport: 'hover-smtp',
-    configured: Boolean(CONFIG.smtpPass),
-  });
-});
-
-app.post('/', async (req, res) => {
+async function handleContactPost(req, res) {
   try {
     const data = normalizePayload(parsePayload(req));
 
@@ -243,8 +234,23 @@ app.post('/', async (req, res) => {
   } catch (error) {
     return json(res, 200, { ok: false, error: String(error.message || error) });
   }
+}
+
+app.get('/api/contact', (_req, res) => {
+  json(res, 200, {
+    ok: true,
+    service: 'przdnt-contact',
+    version: CONFIG.contactApiVersion,
+    transport: 'hover-smtp',
+    configured: Boolean(CONFIG.smtpPass),
+  });
 });
 
+app.post('/api/contact', handleContactPost);
+
+// Статика сайта (index.html, css, js) — один сервис на Render вместо static + API.
+app.use(express.static(path.join(__dirname, '..'), { index: 'index.html' }));
+
 app.listen(PORT, () => {
-  console.log(`przdnt-contact-api listening on ${PORT}`);
+  console.log(`przdnt site + contact API listening on ${PORT}`);
 });
