@@ -7,3 +7,29 @@ services:
     branch: przdnt
     buildCommand: ""
     staticPublishPath: .
+
+  # API формы → Hover SMTP (info@timeto.show), без Gmail OAuth
+  - type: web
+    name: przdnt-contact
+    runtime: node
+    branch: przdnt
+    rootDir: contact-api
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: SMTP_HOST
+        value: mail.hover.com
+      - key: SMTP_PORT
+        value: "465"
+      - key: SMTP_USER
+        value: info@timeto.show
+      - key: CONTACT_TO
+        value: info@timeto.show
+      - key: CONTACT_FROM
+        value: info@timeto.show
+      - key: CONTACT_FROM_NAME
+        value: timeto.show
+      - key: CONTACT_SUBJECT_PREFIX
+        value: 'Спектакль "Ложитесь, господин президент!" — przdnt.com'
+      - key: SMTP_PASS
+        sync: false

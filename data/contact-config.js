@@ -1,9 +1,8 @@
 /**
- * Отдельный GAS-проект для przdnt.com (не тот же скрипт, что у 1984show.com).
+ * URL API формы (Render → сервис przdnt-contact).
+ * После деплоя замените на фактический адрес, например:
+ * https://przdnt-contact.onrender.com/
  *
- * 1. script.google.com → Новый проект → вставить scripts/google-apps-script/Code.gs
- * 2. Развернуть → Веб-приложение (запуск от «я», доступ «все»)
- * 3. Вставить URL …/exec ниже
- * 4. authorizeContactForm() → Run → разрешить Gmail
+ * Отправка через Hover SMTP: info@timeto.show (пароль — только в Render, не в репозитории).
  */
-window.CONTACT_FORM_ENDPOINT = 'https://script.google.com/macros/s/XXXXXXXX/exec';
+window.CONTACT_FORM_ENDPOINT = 'https://przdnt-contact.onrender.com/';
