@@ -1,0 +1,17 @@
+User-Agent: *
+Disallow: /page32341660.html
+Disallow: /error404
+Disallow: /tilda/form*
+Disallow: /tilda/rec*
+Disallow: /tilda/click*
+Disallow: /tilda/scroll*
+Disallow: /tilda/popup*
+Disallow: /tilda/cart*
+Disallow: /tilda/product*
+Disallow: /tilda/event*
+Disallow: /*_escaped_fragment_*
+Disallow:
+
+
+Sitemap: http://przdnt.com/sitemap.xml
+Host: przdnt.com

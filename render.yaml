@@ -1,0 +1,9 @@
+# Static site: https://render.com/docs/static-sites
+# В Render: New → Static Site → репозиторий old_sites, ветка przdnt.
+services:
+  - type: web
+    name: przdnt
+    runtime: static
+    branch: przdnt
+    buildCommand: ""
+    staticPublishPath: .

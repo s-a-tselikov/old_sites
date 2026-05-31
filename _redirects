@@ -1,0 +1,3 @@
+# Правила для Render Static Sites (формат Netlify)
+/error404    /404.html    404
+/error404/   /404.html    404
