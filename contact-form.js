@@ -87,12 +87,21 @@
     input.classList.add('is-error');
   }
 
-  function showValidationError(form, message, fieldName) {
+  function showValidationErrors(form, errors) {
     clearFieldErrors(form);
-    if (fieldName) {
-      setFieldError(form, fieldName);
-    }
-    setStatus(form, message, false);
+    if (!errors || !errors.length) return;
+
+    var messages = [];
+    errors.forEach(function (err) {
+      if (err.field) {
+        setFieldError(form, err.field);
+      }
+      if (messages.indexOf(err.message) === -1) {
+        messages.push(err.message);
+      }
+    });
+
+    setStatus(form, messages.join('\n'), false);
   }
 
   function bindFieldErrorReset(form) {
@@ -100,11 +109,13 @@
       if (field.name === 'website') return;
       field.addEventListener('input', function () {
         field.classList.remove('is-error');
-        var statusEl = getStatusEl(form);
-        if (statusEl && statusEl.classList.contains('is-error')) {
-          statusEl.hidden = true;
-          statusEl.textContent = '';
-          statusEl.classList.remove('is-error');
+        if (!form.querySelector('.t-input.is-error')) {
+          var statusEl = getStatusEl(form);
+          if (statusEl && statusEl.classList.contains('is-error')) {
+            statusEl.hidden = true;
+            statusEl.textContent = '';
+            statusEl.classList.remove('is-error');
+          }
         }
       });
     });
@@ -238,25 +249,27 @@
   }
 
   function validateClient(data) {
+    var errors = [];
+
     if (!data.name) {
-      return { message: 'Укажите, как к вам обращаться.', field: 'name' };
+      errors.push({ message: 'Укажите, как к вам обращаться.', field: 'name' });
     }
     if (!isValidContactEmail(data.email)) {
-      return { message: 'Укажите корректный email.', field: 'email' };
+      errors.push({ message: 'Укажите корректный email.', field: 'email' });
     }
     if (!data.message || data.message.length < 10) {
-      return {
+      errors.push({
         message: 'Сообщение слишком короткое (минимум 10 символов).',
         field: 'message',
-      };
-    }
-    if (data.message.length > 5000) {
-      return {
+      });
+    } else if (data.message.length > 5000) {
+      errors.push({
         message: 'Сообщение слишком длинное (максимум 5000 символов).',
         field: 'message',
-      };
+      });
     }
-    return null;
+
+    return errors.length ? errors : null;
   }
 
   async function sendToAppsScript(data) {
@@ -301,9 +314,9 @@
       return;
     }
 
-    var validation = validateClient(data);
-    if (validation) {
-      showValidationError(form, validation.message, validation.field);
+    var validationErrors = validateClient(data);
+    if (validationErrors) {
+      showValidationErrors(form, validationErrors);
       return;
     }
 
@@ -347,7 +360,7 @@
       } else if (msg.indexOf('Сообщение') !== -1) {
         errorField = 'message';
       }
-      showValidationError(form, msg, errorField);
+      showValidationErrors(form, [{ message: msg, field: errorField }]);
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
