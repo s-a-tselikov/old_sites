@@ -1,12 +1,33 @@
 /**
  * Форма обратной связи — przdnt.com (отдельный GAS-проект, не скрипт 1984).
  *
+ * === Развёртывание ===
  * 1. script.google.com → Новый проект → вставить этот файл целиком.
  * 2. Развернуть → Новое развёртывание → Веб-приложение (запуск от «я», доступ «все»).
  * 3. URL …/exec → data/contact-config.js → CONTACT_FORM_ENDPOINT
- * 4. Один раз: authorizeContactForm() → Run → разрешить Gmail.
- * 5. (Рекомендуется) Службы → + → Gmail API.
  *
+ * === Если «This app is blocked» при авторизации Gmail ===
+ * Google блокирует новые непроверенные приложения с доступом к почте.
+ * Нужно один раз настроить OAuth consent screen (5–10 мин):
+ *
+ * A) Apps Script → Проект → Настройки проекта (⚙) → «Проект Google Cloud Platform»
+ *    Запомните номер проекта (или «Сменить проект» → создать новый).
+ *
+ * B) console.cloud.google.com → выберите этот проект →
+ *    «APIs & Services» → «OAuth consent screen»:
+ *    - User type: External → Create
+ *    - App name: przdnt contact (любое), User support email: ваш Gmail
+ *    - Developer contact: ваш Gmail → Save and Continue
+ *    - Scopes: можно пропустить (добавятся при первом Run)
+ *    - Test users: + ADD USERS → ваш Gmail (тот же, что владелец скрипта)
+ *    - Save → статус «Testing» — это нормально для личного использования
+ *
+ * C) В редакторе Apps Script: выбрать authorizeContactForm → Run (▶).
+ *    Если «Google hasn't verified this app» → Advanced → Go to … (unsafe) → Allow.
+ *
+ * D) Проверить «Входящие» и «Спам». Gmail API подключать не обязательно.
+ *
+ * Посетители сайта OAuth не проходят — права выдаёт только владелец скрипта.
  * Для каждого нового сайта — свой GAS-проект и свой URL в contact-config.js.
  */
 
