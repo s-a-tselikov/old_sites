@@ -179,7 +179,7 @@ async function sendContactEmail(data) {
   const subject = buildSubject(reference);
   const transporter = getTransporter();
 
-  await transporter.sendMail({
+  const info = await transporter.sendMail({
     from: `"${CONFIG.contactFromName}" <${CONFIG.contactFromEmail}>`,
     to: CONFIG.contactToEmail,
     replyTo: `"${data.name}" <${data.email}>`,
@@ -187,6 +187,17 @@ async function sendContactEmail(data) {
     text: buildPlainBody(data, reference),
     html: buildHtmlBody(data, reference),
   });
+
+  console.log(
+    'Contact email sent:',
+    JSON.stringify({
+      to: CONFIG.contactToEmail,
+      from: CONFIG.contactFromEmail,
+      subject,
+      messageId: info.messageId || null,
+      response: info.response || null,
+    })
+  );
 }
 
 function parsePayload(req) {
@@ -243,6 +254,8 @@ app.get('/api/contact', (_req, res) => {
     version: CONFIG.contactApiVersion,
     transport: 'hover-smtp',
     configured: Boolean(CONFIG.smtpPass),
+    deliverTo: CONFIG.contactToEmail,
+    sendFrom: CONFIG.contactFromEmail,
   });
 });
 
