@@ -2,6 +2,7 @@
   'use strict';
 
   var endpoint = (window.CONTACT_FORM_ENDPOINT || '').trim();
+  var subjectPrefix = (window.CONTACT_SUBJECT_PREFIX || '').trim();
   var forms = document.querySelectorAll('[data-contact-form]');
   var warmedUp = false;
 
@@ -34,7 +35,12 @@
   }
 
   function isConfigured() {
-    return endpoint && endpoint.indexOf('YOUR_DEPLOYMENT') === -1 && endpoint.indexOf('XXXXXXXX') === -1;
+    return (
+      endpoint &&
+      endpoint.indexOf('YOUR_DEPLOYMENT') === -1 &&
+      endpoint.indexOf('XXXXXXXX') === -1 &&
+      subjectPrefix
+    );
   }
 
   function warmupEndpoint() {
@@ -219,6 +225,7 @@
         message: data.message,
         website: data.website,
         source: window.location.hostname || 'przdnt.com',
+        subjectPrefix: subjectPrefix,
       }),
     });
 
@@ -260,7 +267,7 @@
     if (!isConfigured()) {
       setStatus(
         form,
-        'Форма ещё не подключена к почте. Укажите CONTACT_FORM_ENDPOINT в data/contact-config.js.'
+        'Форма ещё не подключена к почте. Укажите CONTACT_FORM_ENDPOINT и CONTACT_SUBJECT_PREFIX в data/contact-config.js.'
       );
       return;
     }
