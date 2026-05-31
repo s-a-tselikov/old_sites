@@ -144,10 +144,11 @@
   function setStatus(form, text, isSuccess) {
     var el = getStatusEl(form);
     if (!el) return;
-    el.hidden = false;
     el.textContent = text;
     el.classList.toggle('is-success', Boolean(isSuccess));
     el.classList.toggle('is-error', !isSuccess && Boolean(text));
+    el.classList.toggle('is-visible', Boolean(text));
+    el.setAttribute('aria-hidden', text ? 'false' : 'true');
   }
 
   function clearFieldErrors(form) {
@@ -192,9 +193,9 @@
         if (!form.querySelector('.t-input.is-error')) {
           var statusEl = getStatusEl(form);
           if (statusEl && statusEl.classList.contains('is-error')) {
-            statusEl.hidden = true;
             statusEl.textContent = '';
-            statusEl.classList.remove('is-error');
+            statusEl.classList.remove('is-error', 'is-visible');
+            statusEl.setAttribute('aria-hidden', 'true');
           }
         }
       });

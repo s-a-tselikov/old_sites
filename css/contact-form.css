@@ -23,14 +23,22 @@
 #rec1672674771 .form-status,
 #rec1650510481 .form-status {
   margin-top: 12px;
+  min-height: 4.5em;
   text-align: center;
   white-space: pre-line;
-  color: #cc3b3b;
+  color: #7b1e1e;
+  visibility: hidden;
+}
+
+#rec1672674771 .form-status.is-visible,
+#rec1650510481 .form-status.is-visible {
+  visibility: visible;
 }
 
 #rec1672674771 .form-status.is-error,
 #rec1650510481 .form-status.is-error {
   font-weight: 700;
+  color: #7b1e1e;
 }
 
 #rec1672674771 .form-status.is-success,
