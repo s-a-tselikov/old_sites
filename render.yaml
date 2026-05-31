@@ -1,0 +1,8 @@
+# Static site serebrennikov.ge на Render (бесплатно).
+services:
+  - type: web
+    name: old-sites-serebrennikov-ge
+    runtime: static
+    branch: serebrennikov_ge
+    buildCommand: echo "static serebrennikov.ge"
+    staticPublishPath: .

@@ -1,0 +1,17 @@
+User-Agent: *
+Disallow: /page62888169.html
+Disallow: /error404
+Disallow: /tilda/form*
+Disallow: /tilda/rec*
+Disallow: /tilda/click*
+Disallow: /tilda/scroll*
+Disallow: /tilda/popup*
+Disallow: /tilda/cart*
+Disallow: /tilda/product*
+Disallow: /tilda/event*
+Disallow: /*_escaped_fragment_*
+Disallow:
+
+
+Sitemap: http://serebrennikov.ge/sitemap.xml
+Host: serebrennikov.ge

@@ -1,0 +1,9 @@
+# Правила для Render Static Sites (формат Netlify)
+/ru         /index.html      200
+/ru/        /index.html      200
+/eng        /english.html    200
+/eng/       /english.html    200
+/geo        /georgian.html   200
+/geo/       /georgian.html   200
+/error404   /404.html        404
+/error404/  /404.html        404
