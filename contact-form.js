@@ -91,17 +91,20 @@
     clearFieldErrors(form);
     if (!errors || !errors.length) return;
 
-    var messages = [];
     errors.forEach(function (err) {
       if (err.field) {
         setFieldError(form, err.field);
       }
-      if (messages.indexOf(err.message) === -1) {
-        messages.push(err.message);
-      }
     });
 
-    setStatus(form, messages.join('\n'), false);
+    var message =
+      errors.length > 2
+        ? 'Для отправки сообщения заполните все поля формы'
+        : errors.map(function (err) {
+            return err.message;
+          }).join('\n');
+
+    setStatus(form, message, false);
   }
 
   function bindFieldErrorReset(form) {
