@@ -1,17 +1,16 @@
-ErrorDocument 403 /page101131656.html
-ErrorDocument 404 /page101131656.html
+ErrorDocument 403 /404.htm
+ErrorDocument 404 /404.htm
 
-DirectoryIndex page102682116.html
+DirectoryIndex index.html
 
 RewriteEngine On
 
 RewriteCond %{REQUEST_FILENAME} /robots.txt
 RewriteCond "%{DOCUMENT_ROOT}/robots_%{HTTP_HOST}.txt" -f
 RewriteRule ^(.*)$ robots_%{HTTP_HOST}.txt [NC,L]
-RewriteRule ^error404$ page101131656.html [NC]
-RewriteRule ^error404/$ page101131656.html [NC]
+RewriteRule ^error404$ 404.htm [NC]
+RewriteRule ^error404/$ 404.htm [NC]
 
-RewriteRule ^eng$ page101147116.html [NC]
-RewriteRule ^eng/$ page101147116.html [NC]
-
+RewriteRule ^eng$ eng.html [NC]
+RewriteRule ^eng/$ eng.html [NC]
 

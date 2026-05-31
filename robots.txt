@@ -1,5 +1,5 @@
 User-Agent: *
-Disallow: /page101131656.html
+Disallow: /404.htm
 Disallow: /error404
 Disallow: /tilda/form*
 Disallow: /tilda/rec*
