@@ -1,0 +1,8 @@
+﻿# Static site prokino.site на Render (бесплатно).
+services:
+  - type: web
+    name: old-sites-prokino
+    runtime: static
+    branch: prokino
+    buildCommand: echo "static prokino.site"
+    staticPublishPath: .
