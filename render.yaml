@@ -1,0 +1,8 @@
+# Static site berkovich.ge на Render (бесплатно).
+services:
+  - type: web
+    name: berkovich-ge
+    runtime: static
+    branch: berkovich_ge
+    buildCommand: echo "static berkovich.ge"
+    staticPublishPath: .
