@@ -7,6 +7,19 @@
   overflow: hidden;
 }
 
+#rec1672674771 .t-btnflex.t-btnflex_type_submit,
+#rec1650510481 .t-btnflex.t-btnflex_type_submit {
+  color: #ffffff;
+  background-color: #ff7300;
+  --border-width: 0px;
+  border-style: none !important;
+  border-radius: 30px;
+  box-shadow: none !important;
+  transition-duration: 0.2s;
+  transition-property: background-color, color, border-color, box-shadow, opacity, transform, gap;
+  transition-timing-function: ease-in-out;
+}
+
 #rec1672674771 .form-status,
 #rec1650510481 .form-status {
   margin-top: 12px;
