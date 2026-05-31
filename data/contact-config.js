@@ -1,6 +1,3 @@
-/**
- * Общий API форм: репозиторий s-a-tselikov/tts-mail (Render Web Service).
- *
- * Проверка: https://tts-mail.onrender.com/api/contact
- */
+// Contact form API: github.com/s-a-tselikov/tts-mail (Render: tts-mail)
+// Health check: https://tts-mail.onrender.com/api/contact
 window.CONTACT_FORM_ENDPOINT = 'https://tts-mail.onrender.com/api/contact';
