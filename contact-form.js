@@ -10,6 +10,7 @@
 
   forms.forEach(function (form) {
     form.addEventListener('submit', onSubmit);
+    bindFieldErrorReset(form);
     form.addEventListener('input', warmupEndpoint, { once: true, capture: true });
     form.addEventListener('focusin', warmupEndpoint, { once: true, capture: true });
   });
@@ -71,6 +72,42 @@
     el.hidden = false;
     el.textContent = text;
     el.classList.toggle('is-success', Boolean(isSuccess));
+    el.classList.toggle('is-error', !isSuccess && Boolean(text));
+  }
+
+  function clearFieldErrors(form) {
+    form.querySelectorAll('.t-input.is-error').forEach(function (field) {
+      field.classList.remove('is-error');
+    });
+  }
+
+  function setFieldError(form, fieldName) {
+    var input = form.querySelector('[name="' + fieldName + '"]');
+    if (!input || !input.classList.contains('t-input')) return;
+    input.classList.add('is-error');
+  }
+
+  function showValidationError(form, message, fieldName) {
+    clearFieldErrors(form);
+    if (fieldName) {
+      setFieldError(form, fieldName);
+    }
+    setStatus(form, message, false);
+  }
+
+  function bindFieldErrorReset(form) {
+    form.querySelectorAll('input[name], textarea[name]').forEach(function (field) {
+      if (field.name === 'website') return;
+      field.addEventListener('input', function () {
+        field.classList.remove('is-error');
+        var statusEl = getStatusEl(form);
+        if (statusEl && statusEl.classList.contains('is-error')) {
+          statusEl.hidden = true;
+          statusEl.textContent = '';
+          statusEl.classList.remove('is-error');
+        }
+      });
+    });
   }
 
   function createFreshField(oldField) {
@@ -202,17 +239,24 @@
 
   function validateClient(data) {
     if (!data.name) {
-      throw new Error('Укажите, как к вам обращаться.');
+      return { message: 'Укажите, как к вам обращаться.', field: 'name' };
     }
     if (!isValidContactEmail(data.email)) {
-      throw new Error('Укажите корректный email.');
+      return { message: 'Укажите корректный email.', field: 'email' };
     }
     if (!data.message || data.message.length < 10) {
-      throw new Error('Сообщение слишком короткое (минимум 10 символов).');
+      return {
+        message: 'Сообщение слишком короткое (минимум 10 символов).',
+        field: 'message',
+      };
     }
     if (data.message.length > 5000) {
-      throw new Error('Сообщение слишком длинное (максимум 5000 символов).');
+      return {
+        message: 'Сообщение слишком длинное (максимум 5000 символов).',
+        field: 'message',
+      };
     }
+    return null;
   }
 
   async function sendToAppsScript(data) {
@@ -257,14 +301,14 @@
       return;
     }
 
-    try {
-      validateClient(data);
-    } catch (validationError) {
-      setStatus(form, validationError.message);
+    var validation = validateClient(data);
+    if (validation) {
+      showValidationError(form, validation.message, validation.field);
       return;
     }
 
     if (!isConfigured()) {
+      clearFieldErrors(form);
       setStatus(
         form,
         'Форма ещё не подключена к почте. Укажите CONTACT_FORM_ENDPOINT и CONTACT_SUBJECT_PREFIX в data/contact-config.js.'
@@ -273,6 +317,7 @@
     }
 
     warmupEndpoint();
+    clearFieldErrors(form);
 
     if (submitBtn) {
       submitBtn.disabled = true;
@@ -282,6 +327,7 @@
 
     try {
       await sendToAppsScript(data);
+      clearFieldErrors(form);
       resetContactForm(form);
       setStatus(
         form,
@@ -293,7 +339,15 @@
       if (msg === 'Failed to fetch') {
         msg = 'Не удалось связаться с сервером формы. Попробуйте позже.';
       }
-      setStatus(form, msg);
+      var errorField = null;
+      if (msg.indexOf('email') !== -1) {
+        errorField = 'email';
+      } else if (msg.indexOf('обращаться') !== -1) {
+        errorField = 'name';
+      } else if (msg.indexOf('Сообщение') !== -1) {
+        errorField = 'message';
+      }
+      showValidationError(form, msg, errorField);
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
