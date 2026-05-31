@@ -1,0 +1,8 @@
+﻿# Static site vedisvoiplug.com на Render (бесплатно).
+services:
+  - type: web
+    name: vedisvoiplug
+    runtime: static
+    branch: vedisvoiplug
+    buildCommand: echo "static vedisvoiplug.com"
+    staticPublishPath: .
