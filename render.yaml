@@ -1,8 +1,38 @@
 # Static site serebrennikov.ge на Render (бесплатно).
+# Redirects/Rewrites: https://render.com/docs/redirects-rewrites
+# Файл _redirects Render не читает — маршруты задаются здесь или в Dashboard.
 services:
   - type: web
     name: old-sites-serebrennikov-ge
     runtime: static
     branch: serebrennikov_ge
-    buildCommand: echo "static serebrennikov.ge"
+    buildCommand: node prepare-pages.js
     staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /eng
+        destination: /eng/index.html
+      - type: rewrite
+        source: /eng/
+        destination: /eng/index.html
+      - type: rewrite
+        source: /ru
+        destination: /ru/index.html
+      - type: rewrite
+        source: /ru/
+        destination: /ru/index.html
+      - type: rewrite
+        source: /geo
+        destination: /geo/index.html
+      - type: rewrite
+        source: /geo/
+        destination: /geo/index.html
+      - type: rewrite
+        source: /error404
+        destination: /error404/index.html
+      - type: rewrite
+        source: /error404/
+        destination: /error404/index.html
+      - type: rewrite
+        source: /favicon.ico
+        destination: /favicon.png
