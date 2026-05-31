@@ -99,7 +99,7 @@
 
     var message =
       errors.length > 2
-        ? 'Для отправки сообщения заполните все поля формы'
+        ? 'Для отправки сообщения заполните все поля формы.'
         : errors.map(function (err) {
             return err.message;
           }).join('\n');
