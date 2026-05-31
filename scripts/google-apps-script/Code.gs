@@ -1,15 +1,13 @@
 /**
- * Форма обратной связи — przdnt.com
+ * Форма обратной связи — przdnt.com (отдельный GAS-проект, не скрипт 1984).
  *
- * 1. Создайте проект Apps Script под Google-аккаунтом, с которого будет уходить почта.
- * 2. Вставьте этот файл целиком.
- * 3. Развернуть → Новое развёртывание → Веб-приложение (запуск от «я», доступ «все»).
- * 4. URL …/exec → data/contact-config.js → CONTACT_FORM_ENDPOINT
- * 5. Один раз: authorizeContactForm() → Run → разрешить Gmail.
- * 6. (Рекомендуется) Службы → Gmail API.
+ * 1. script.google.com → Новый проект → вставить этот файл целиком.
+ * 2. Развернуть → Новое развёртывание → Веб-приложение (запуск от «я», доступ «все»).
+ * 3. URL …/exec → data/contact-config.js → CONTACT_FORM_ENDPOINT
+ * 4. Один раз: authorizeContactForm() → Run → разрешить Gmail.
+ * 5. (Рекомендуется) Службы → + → Gmail API.
  *
- * Можно также добавить getContactSubjectPrefix_ в существующий общий GAS-проект
- * и переразвернуть — тогда тема для przdnt.com определяется по полю source.
+ * Для каждого нового сайта — свой GAS-проект и свой URL в contact-config.js.
  */
 
 var CONFIG = {
@@ -18,8 +16,8 @@ var CONFIG = {
   contactMinMessage: 10,
   contactMaxMessage: 5000,
   contactRateLimitSec: 60,
-  contactCounterPeriodKey: 'CONTACT_COUNTER_PERIOD',
-  contactCounterSeqKey: 'CONTACT_COUNTER_SEQ',
+  contactCounterPeriodKey: 'PRZDNT_CONTACT_COUNTER_PERIOD',
+  contactCounterSeqKey: 'PRZDNT_CONTACT_COUNTER_SEQ',
   contactApiVersion: 5,
 };
 
@@ -201,20 +199,8 @@ function nextContactReference_() {
   }
 }
 
-function getContactSubjectPrefix_(source) {
-  var host = String(source || '').toLowerCase().replace(/^www\./, '');
-  var byHost = {
-    'przdnt.com': CONFIG.contactSubjectPrefix,
-    'przdnt.am': CONFIG.contactSubjectPrefix,
-  };
-  if (byHost[host]) {
-    return byHost[host];
-  }
-  return CONFIG.contactSubjectPrefix;
-}
-
-function buildContactSubject_(reference, source) {
-  return getContactSubjectPrefix_(source) + ' (форма обратной связи, запрос #' + reference + ')';
+function buildContactSubject_(reference) {
+  return CONFIG.contactSubjectPrefix + ' (форма обратной связи, запрос #' + reference + ')';
 }
 
 function buildContactDisplayName_(clientName) {
@@ -304,7 +290,7 @@ function buildContactPlainBody_(data, reference) {
 function sendContactEmail_(data) {
   var to = CONFIG.contactToEmail;
   var reference = nextContactReference_();
-  var subject = buildContactSubject_(reference, data.source);
+  var subject = buildContactSubject_(reference);
   var fromEmail = getSenderEmail_();
   var plain = buildContactPlainBody_(data, reference);
   var html = buildContactHtmlBody_(data, reference);
