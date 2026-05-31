@@ -1,0 +1,33 @@
+#rec1672674771 .contact-form__hp,
+#rec1650510481 .contact-form__hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+#rec1672674771 .form-status,
+#rec1650510481 .form-status {
+  margin-top: 12px;
+  text-align: center;
+  white-space: pre-line;
+  color: #cc3b3b;
+}
+
+#rec1672674771 .form-status.is-error,
+#rec1650510481 .form-status.is-error {
+  font-weight: 700;
+}
+
+#rec1672674771 .form-status.is-success,
+#rec1650510481 .form-status.is-success {
+  color: #3dca6a;
+  font-weight: 700;
+}
+
+#rec1672674771 .t-input.is-error,
+#rec1650510481 .t-input.is-error {
+  background-color: #ffb8b8 !important;
+  box-shadow: inset 0 0 0 2px #cc3b3b !important;
+}
