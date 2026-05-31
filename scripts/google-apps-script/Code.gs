@@ -1,6 +1,4 @@
 /**
- * Устарело: форма przdnt.com отправляет почту через contact-api/ (Node + Hover SMTP).
- *
- * Google Apps Script здесь больше не используется — не нужен Gmail OAuth.
- * См. contact-api/server.js и render.yaml (сервис przdnt-contact).
+ * Форма przdnt.com → общий API tts-mail (s-a-tselikov/tts-mail на Render).
+ * Gmail не используется для отправки — только CONTACT_TO для входящих.
  */

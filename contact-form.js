@@ -226,17 +226,15 @@
     try {
       payload = await response.json();
     } catch (parseError) {
-      if (!response.ok) {
-        throw new Error('Сервер вернул ошибку. Попробуйте позже.');
-      }
+      throw new Error('Сервер формы не отвечает (ожидался JSON). Проверьте деплой на Render.');
     }
 
     if (!response.ok) {
       throw new Error((payload && payload.error) || 'Не удалось отправить сообщение.');
     }
 
-    if (payload && payload.ok === false) {
-      throw new Error(payload.error || 'Не удалось отправить сообщение.');
+    if (!payload || payload.ok !== true) {
+      throw new Error((payload && payload.error) || 'Не удалось отправить сообщение.');
     }
   }
 

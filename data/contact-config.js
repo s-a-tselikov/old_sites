@@ -1,5 +1,6 @@
 /**
- * API формы на том же домене, что и сайт (избегаем CORS и отдельного przdnt-contact).
- * Render: один Web Service (Node), rootDir contact-api — см. render.yaml.
+ * Общий API форм: репозиторий s-a-tselikov/tts-mail (Render Web Service).
+ *
+ * Проверка: https://tts-mail.onrender.com/api/contact
  */
-window.CONTACT_FORM_ENDPOINT = window.location.origin + '/api/contact';
+window.CONTACT_FORM_ENDPOINT = 'https://tts-mail.onrender.com/api/contact';

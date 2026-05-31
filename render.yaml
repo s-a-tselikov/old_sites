@@ -1,29 +1,9 @@
-# Один Web Service: статика przdnt.com + POST /api/contact (Hover SMTP).
-# В Render: Blueprint или New → Web Service, репозиторий old_sites, ветка przdnt.
-# Если был Static Site old-sites — замените на Web Service с этими настройками
-# (или создайте новый Web Service и удалите static).
+# Static site przdnt.com на Render (бесплатно).
+# API форм — отдельный репозиторий s-a-tselikov/tts-mail (Web Service tts-mail).
 services:
   - type: web
     name: old-sites
-    runtime: node
+    runtime: static
     branch: przdnt
-    rootDir: contact-api
-    buildCommand: npm install
-    startCommand: npm start
-    envVars:
-      - key: SMTP_HOST
-        value: mail.hover.com
-      - key: SMTP_PORT
-        value: "465"
-      - key: SMTP_USER
-        value: info@timeto.show
-      - key: CONTACT_TO
-        value: s.a.tselikov@gmail.com
-      - key: CONTACT_FROM
-        value: info@timeto.show
-      - key: CONTACT_FROM_NAME
-        value: 'Форма обратной связи'
-      - key: CONTACT_SUBJECT_PREFIX
-        value: 'Спектакль "Ложитесь, господин президент!" — przdnt.com'
-      - key: SMTP_PASS
-        sync: false
+    buildCommand: echo "static przdnt.com"
+    staticPublishPath: .
