@@ -88,6 +88,7 @@
     style.textContent =
       '[data-contact-form] .form-status{display:block!important;min-height:5.5em;margin-top:12px;}' +
       '[data-contact-form] .form-status[hidden]{visibility:hidden!important;}' +
+      '[data-contact-form] .contact-form__hp,[data-contact-form] input[name="website"]{display:none!important;visibility:hidden!important;position:absolute!important;width:0!important;height:0!important;opacity:0!important;pointer-events:none!important;overflow:hidden!important;}' +
       '[data-contact-form] .t-form__submit button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}' +
       '#rec571811319 .t698,#rec571811319 form,#rec571811319 .t-form__submit{pointer-events:auto;}#rec571911150 .t698,#rec571911150 form,#rec571911150 .t-form__submit{pointer-events:auto;}';
     document.head.appendChild(style);
