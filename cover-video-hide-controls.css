@@ -1,0 +1,37 @@
+/* Hero cover (#rec742908027): hide video UI, keep CTA button clickable */
+#rec742908027 .t-cover__carrier,
+#rec742908027 .t-cover__video__wrapper {
+  overflow: hidden !important;
+}
+
+#rec742908027 .t-cover__carrier iframe,
+#rec742908027 .t-cover__video__wrapper iframe,
+#rec742908027 .t-cover__carrier video {
+  pointer-events: none !important;
+}
+
+/* Crop YouTube chrome (pause / playlist arrows) */
+#rec742908027 .t-cover__carrier iframe,
+#rec742908027 .t-cover__video__wrapper iframe {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 300% !important;
+  height: 300% !important;
+  max-width: none !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+#rec742908027 .t-cover__carrier video {
+  object-fit: cover;
+}
+
+#rec742908027 .t-cover__video-controls,
+#rec742908027 [class*='video-control'],
+#rec742908027 [class*='VideoControl'],
+#rec742908027 [class*='videocontrol'] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
