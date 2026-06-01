@@ -1,0 +1,73 @@
+/* Language menu — black bar, centered, TildaSans like body text */
+#rec542541894,
+#rec542541894 .t229,
+#rec542541894 .t229__maincontainer {
+  background-color: #000000 !important;
+}
+
+#rec542541894 .t229 {
+  position: relative !important;
+  width: 100% !important;
+  left: auto !important;
+  top: auto !important;
+}
+
+#rec542541894 .t229__maincontainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#rec542541894 .t229__padding40px {
+  display: none;
+}
+
+#rec542541894 .t229__centerside {
+  position: static;
+  width: auto;
+  left: auto;
+  transform: none;
+  margin: 0;
+}
+
+#rec542541894 .t-menu__list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#rec542541894 .t229__list_item {
+  padding: 0 24px !important;
+}
+
+#rec542541894 .t-menu__link-item {
+  font-family: var(--t-text-font, 'TildaSans', Arial, sans-serif);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 36px;
+  color: #ffffff;
+  text-transform: none;
+  letter-spacing: normal;
+  text-decoration: none;
+  -webkit-transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+#rec542541894 .t-menu__link-item:hover {
+  color: #d62f2f;
+  opacity: 1;
+}
+
+#rec542541894 .t-menu__link-item.t-active:not(.t978__menu-link) {
+  color: #d62f2f !important;
+}
+
+@supports (overflow: -webkit-marquee) and (justify-content: inherit) {
+  #rec542541894 .t-menu__link-item,
+  #rec542541894 .t-menu__link-item.t-active {
+    opacity: 1 !important;
+  }
+}
