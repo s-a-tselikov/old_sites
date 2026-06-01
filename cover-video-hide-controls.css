@@ -1,7 +1,29 @@
-/* Hero cover (#rec742908027): hide video UI, keep CTA button clickable */
+/* Hero cover (#rec742908027): no visible player chrome, including the first seconds */
 #rec742908027 .t-cover__carrier,
 #rec742908027 .t-cover__video__wrapper {
   overflow: hidden !important;
+  position: relative;
+}
+
+/* Poster masks YouTube UI until playback is stable */
+#coverCarry742908027::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background-image: url('images/tild6630-3530-4431-b863-333432656562__img_0436_copy.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+#coverCarry742908027.cover-video-ready::after {
+  opacity: 0;
+  visibility: hidden;
 }
 
 #rec742908027 .t-cover__carrier iframe,
@@ -10,7 +32,22 @@
   pointer-events: none !important;
 }
 
-/* Crop YouTube chrome (pause / playlist arrows) */
+/* Hide video layer until ready (prevents control flash on load) */
+#coverCarry742908027:not(.cover-video-ready) iframe,
+#coverCarry742908027:not(.cover-video-ready) video,
+#coverCarry742908027:not(.cover-video-ready) .t-cover__video__wrapper {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+#coverCarry742908027.cover-video-ready iframe,
+#coverCarry742908027.cover-video-ready video,
+#coverCarry742908027.cover-video-ready .t-cover__video__wrapper {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Crop YouTube chrome if any pixels remain */
 #rec742908027 .t-cover__carrier iframe,
 #rec742908027 .t-cover__video__wrapper iframe {
   position: absolute !important;
