@@ -80,6 +80,8 @@
 
   if (!forms.length) return;
 
+  injectLayoutStyles();
+
   forms.forEach(function (form) {
     form.addEventListener('submit', onSubmit);
     bindFieldErrorReset(form);
@@ -140,6 +142,17 @@
     });
   }
 
+  function injectLayoutStyles() {
+    if (document.getElementById('contact-form-layout-styles')) return;
+
+    var style = document.createElement('style');
+    style.id = 'contact-form-layout-styles';
+    style.textContent =
+      '[data-contact-form] .form-status{display:block!important;min-height:5.5em;margin-top:12px;}' +
+      '[data-contact-form] .form-status[hidden]{visibility:hidden!important;}';
+    document.head.appendChild(style);
+  }
+
   function getStatusEl(form) {
     return form.querySelector('[data-form-status]');
   }
@@ -151,10 +164,12 @@
   function setStatus(form, text, isSuccess) {
     var el = getStatusEl(form);
     if (!el) return;
-    el.hidden = false;
+    var visible = Boolean(text);
+    el.hidden = !visible;
+    el.setAttribute('aria-hidden', visible ? 'false' : 'true');
     el.textContent = text;
     el.classList.toggle('is-success', Boolean(isSuccess));
-    el.classList.toggle('is-error', !isSuccess && Boolean(text));
+    el.classList.toggle('is-error', !isSuccess && visible);
   }
 
   function clearFieldErrors(form) {
@@ -199,9 +214,7 @@
         if (!form.querySelector('.t-input.is-error')) {
           var statusEl = getStatusEl(form);
           if (statusEl && statusEl.classList.contains('is-error')) {
-            statusEl.hidden = true;
-            statusEl.textContent = '';
-            statusEl.classList.remove('is-error');
+            setStatus(form, '', false);
           }
         }
       });
@@ -260,10 +273,21 @@
     return field;
   }
 
+  function preserveScrollPosition(action) {
+    var x = window.scrollX;
+    var y = window.scrollY;
+    action();
+    window.scrollTo(x, y);
+  }
+
   function resetContactForm(form) {
-    if (document.activeElement && form.contains(document.activeElement)) {
-      document.activeElement.blur();
-    }
+    preserveScrollPosition(function () {
+      if (document.activeElement && form.contains(document.activeElement)) {
+        if (typeof document.activeElement.blur === 'function') {
+          document.activeElement.blur();
+        }
+      }
+    });
 
     var resetCount = parseInt(form.getAttribute('data-contact-reset') || '0', 10) + 1;
     form.setAttribute('data-contact-reset', String(resetCount));
@@ -453,62 +477,69 @@
 
   async function onSubmit(event) {
     event.preventDefault();
+    var scrollX = window.scrollX;
+    var scrollY = window.scrollY;
     var form = event.currentTarget;
     var submitBtn = getSubmitBtn(form);
-    var data = readFields(form);
-
-    if (data.website) {
-      form.reset();
-      setStatus(form, msg(form, 'honeypotSuccess'), true);
-      return;
-    }
-
-    var validationErrors = validateClient(form, data);
-    if (validationErrors) {
-      showValidationErrors(form, validationErrors);
-      return;
-    }
-
-    if (!isConfigured()) {
-      clearFieldErrors(form);
-      setStatus(form, msg(form, 'notConfigured'));
-      return;
-    }
-
-    warmupEndpoint();
-    clearFieldErrors(form);
-
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.setAttribute('aria-busy', 'true');
-    }
-    setStatus(form, msg(form, 'sending'));
 
     try {
-      await sendToMailApi(data);
-      clearFieldErrors(form);
-      resetContactForm(form);
-      setStatus(form, msg(form, 'success'), true);
-    } catch (sendError) {
-      var raw = sendError.message || '';
-      if (raw === 'Failed to fetch') {
-        raw = '__NETWORK__';
+      var data = readFields(form);
+
+      if (data.website) {
+        form.reset();
+        setStatus(form, msg(form, 'honeypotSuccess'), true);
+        return;
       }
-      if (raw === '__SERVER_NO_JSON__') {
-        showValidationErrors(form, [{ message: msg(form, 'serverNoJson'), field: null }]);
-      } else if (raw === '__NETWORK__') {
-        showValidationErrors(form, [{ message: msg(form, 'networkError'), field: null }]);
-      } else if (raw === '__SEND_FAILED__') {
-        showValidationErrors(form, [{ message: msg(form, 'sendFailed'), field: null }]);
-      } else {
-        var translated = translateServerError(form, raw);
-        showValidationErrors(form, [translated]);
+
+      var validationErrors = validateClient(form, data);
+      if (validationErrors) {
+        showValidationErrors(form, validationErrors);
+        return;
+      }
+
+      if (!isConfigured()) {
+        clearFieldErrors(form);
+        setStatus(form, msg(form, 'notConfigured'));
+        return;
+      }
+
+      warmupEndpoint();
+      clearFieldErrors(form);
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.setAttribute('aria-busy', 'true');
+      }
+      setStatus(form, msg(form, 'sending'));
+
+      try {
+        await sendToMailApi(data);
+        clearFieldErrors(form);
+        resetContactForm(form);
+        setStatus(form, msg(form, 'success'), true);
+      } catch (sendError) {
+        var raw = sendError.message || '';
+        if (raw === 'Failed to fetch') {
+          raw = '__NETWORK__';
+        }
+        if (raw === '__SERVER_NO_JSON__') {
+          showValidationErrors(form, [{ message: msg(form, 'serverNoJson'), field: null }]);
+        } else if (raw === '__NETWORK__') {
+          showValidationErrors(form, [{ message: msg(form, 'networkError'), field: null }]);
+        } else if (raw === '__SEND_FAILED__') {
+          showValidationErrors(form, [{ message: msg(form, 'sendFailed'), field: null }]);
+        } else {
+          var translated = translateServerError(form, raw);
+          showValidationErrors(form, [translated]);
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.removeAttribute('aria-busy');
+        }
       }
     } finally {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.removeAttribute('aria-busy');
-      }
+      window.scrollTo(scrollX, scrollY);
     }
   }
 })();
