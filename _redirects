@@ -1,0 +1,7 @@
+# Render Static Sites (Netlify-style redirects)
+/rus               /index.html        200
+/rus/              /index.html        200
+/arm               /armenian.html     200
+/arm/              /armenian.html     200
+/error404          /404.html          200
+/error404/         /404.html          200

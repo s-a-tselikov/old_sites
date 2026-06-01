@@ -1,0 +1,22 @@
+ErrorDocument 403 /404.html
+ErrorDocument 404 /404.html
+
+DirectoryIndex index.html
+
+RewriteEngine On
+
+RewriteCond %{HTTP:X-Forwarded-Proto} =http
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} /robots.txt
+RewriteCond "%{DOCUMENT_ROOT}/robots_%{HTTP_HOST}.txt" -f
+RewriteRule ^(.*)$ robots_%{HTTP_HOST}.txt [NC,L]
+
+RewriteRule ^error404$ 404.html [NC]
+RewriteRule ^error404/$ 404.html [NC]
+
+RewriteRule ^rus$ index.html [NC]
+RewriteRule ^rus/$ index.html [NC]
+
+RewriteRule ^arm$ armenian.html [NC]
+RewriteRule ^arm/$ armenian.html [NC]
