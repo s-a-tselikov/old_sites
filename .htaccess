@@ -17,7 +17,8 @@ RewriteRule ^jarmusch_rus/$ index.html [NC]
 RewriteRule ^error404$ 404.html [NC]
 RewriteRule ^error404/$ 404.html [NC]
 
-RewriteRule ^jarmusch_arm$ armenian.html [NC]
-RewriteRule ^jarmusch_arm/$ armenian.html [NC]
+RewriteRule ^jarmusch_arm$ index.html [R=301,L,NC]
+RewriteRule ^jarmusch_arm/$ index.html [R=301,L,NC]
+RewriteRule ^armenian\.html$ index.html [R=301,L,NC]
 
 

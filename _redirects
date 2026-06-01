@@ -1,7 +1,8 @@
 # Render Static Sites (Netlify-style redirects)
 /jarmusch_rus      /index.html    200
 /jarmusch_rus/     /index.html    200
-/jarmusch_arm      /armenian.html 200
-/jarmusch_arm/     /armenian.html 200
+/jarmusch_arm      /index.html    301
+/jarmusch_arm/     /index.html    301
+/armenian.html     /index.html    301
 /error404          /404.html      200
 /error404/         /404.html      200
