@@ -1,0 +1,78 @@
+﻿ErrorDocument 403 /404.html
+ErrorDocument 404 /404.html
+
+DirectoryIndex index.html
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} /robots.txt
+RewriteCond "%{DOCUMENT_ROOT}/robots_%{HTTP_HOST}.txt" -f
+RewriteRule ^(.*)$ robots_%{HTTP_HOST}.txt [NC,L]
+
+# Language home pages
+RewriteRule ^ru$ index.html [NC,L]
+RewriteRule ^ru/$ index.html [NC,L]
+
+RewriteRule ^am$ am.html [NC,L]
+RewriteRule ^am/$ am.html [NC,L]
+
+RewriteRule ^eng$ eng.html [NC,L]
+RewriteRule ^eng/$ eng.html [NC,L]
+
+# Model pages (Russian)
+RewriteRule ^elite_rus$ elite_rus.html [NC,L]
+RewriteRule ^elite_rus/$ elite_rus.html [NC,L]
+
+RewriteRule ^comfort_rus$ comfort_rus.html [NC,L]
+RewriteRule ^comfort_rus/$ comfort_rus.html [NC,L]
+
+RewriteRule ^corner_rus$ corner_rus.html [NC,L]
+RewriteRule ^corner_rus/$ corner_rus.html [NC,L]
+
+RewriteRule ^standart_rus$ standart_rus.html [NC,L]
+RewriteRule ^standart_rus/$ standart_rus.html [NC,L]
+
+# Model pages (Armenian)
+RewriteRule ^elite_am$ elite_am.html [NC,L]
+RewriteRule ^elite_am/$ elite_am.html [NC,L]
+
+RewriteRule ^comfort_am$ comfort_am.html [NC,L]
+RewriteRule ^comfort_am/$ comfort_am.html [NC,L]
+
+RewriteRule ^corner_am$ corner_am.html [NC,L]
+RewriteRule ^corner_am/$ corner_am.html [NC,L]
+
+RewriteRule ^standart_am$ standart_am.html [NC,L]
+RewriteRule ^standart_am/$ standart_am.html [NC,L]
+
+# Model pages (English)
+RewriteRule ^elite_eng$ elite_eng.html [NC,L]
+RewriteRule ^elite_eng/$ elite_eng.html [NC,L]
+
+RewriteRule ^comfort_eng$ comfort_eng.html [NC,L]
+RewriteRule ^comfort_eng/$ comfort_eng.html [NC,L]
+
+RewriteRule ^corner_eng$ corner_eng.html [NC,L]
+RewriteRule ^corner_eng/$ corner_eng.html [NC,L]
+
+RewriteRule ^standart_eng$ standart_eng.html [NC,L]
+RewriteRule ^standart_eng/$ standart_eng.html [NC,L]
+
+# Redirect old Tilda page IDs to new URLs
+RewriteRule ^page56918493\.html$ / [R=301,L]
+RewriteRule ^page57005225\.html$ /am [R=301,L]
+RewriteRule ^page57081041\.html$ /eng [R=301,L]
+RewriteRule ^page57080277\.html$ /404 [R=301,L]
+RewriteRule ^page58909035\.html$ /elite_rus [R=301,L]
+RewriteRule ^page58947597\.html$ /comfort_rus [R=301,L]
+RewriteRule ^page58978285\.html$ /corner_rus [R=301,L]
+RewriteRule ^page58982085\.html$ /standart_rus [R=301,L]
+RewriteRule ^page59297997\.html$ /elite_am [R=301,L]
+RewriteRule ^page59321509\.html$ /comfort_am [R=301,L]
+RewriteRule ^page59325247\.html$ /corner_am [R=301,L]
+RewriteRule ^page59327105\.html$ /standart_am [R=301,L]
+RewriteRule ^page59358783\.html$ /elite_eng [R=301,L]
+RewriteRule ^page59359905\.html$ /comfort_eng [R=301,L]
+RewriteRule ^page59361741\.html$ /corner_eng [R=301,L]
+RewriteRule ^page59363223\.html$ /standart_eng [R=301,L]
+
