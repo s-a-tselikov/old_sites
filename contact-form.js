@@ -11,7 +11,8 @@
   injectLayoutStyles();
 
   forms.forEach(function (form) {
-    form.addEventListener('submit', onSubmit);
+    detachTildaForm(form);
+    form.addEventListener('submit', onSubmit, true);
     bindFieldErrorReset(form);
     form.addEventListener('input', warmupEndpoint, { once: true, capture: true });
     form.addEventListener('focusin', warmupEndpoint, { once: true, capture: true });
@@ -86,8 +87,20 @@
     style.id = 'contact-form-layout-styles';
     style.textContent =
       '[data-contact-form] .form-status{display:block!important;min-height:5.5em;margin-top:12px;}' +
-      '[data-contact-form] .form-status[hidden]{visibility:hidden!important;}';
+      '[data-contact-form] .form-status[hidden]{visibility:hidden!important;}' +
+      '[data-contact-form] .t-form__submit button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}' +
+      '#rec742939121 .t698,#rec742939121 form,#rec742939121 .t-form__submit{pointer-events:auto;}';
     document.head.appendChild(style);
+  }
+
+  function detachTildaForm(form) {
+    form.classList.remove('js-form-proccess');
+    form.removeAttribute('data-formactiontype');
+    form.removeAttribute('data-success-callback');
+    form.querySelectorAll('.js-tilda-rule').forEach(function (field) {
+      field.classList.remove('js-tilda-rule');
+      field.removeAttribute('data-tilda-rule');
+    });
   }
 
   function getStatusEl(form) {
@@ -286,6 +299,56 @@
     return true;
   }
 
+  function mapServerError(rawMessage) {
+    var text = String(rawMessage || '').trim();
+    var lower = text.toLowerCase();
+
+    if (lower.indexOf('имя') !== -1 || lower.indexOf('обращаться') !== -1) {
+      if (lower.indexOf('длинн') !== -1) {
+        return { message: 'Имя слишком длинное.', field: 'name' };
+      }
+      return { message: 'Укажите, как к вам обращаться.', field: 'name' };
+    }
+
+    if (lower.indexOf('email') !== -1 || lower.indexOf('e-mail') !== -1) {
+      return { message: 'Укажите корректный email.', field: 'email' };
+    }
+
+    if (lower.indexOf('коротк') !== -1) {
+      return {
+        message: 'Сообщение слишком короткое (минимум 10 символов).',
+        field: 'message',
+      };
+    }
+
+    if (lower.indexOf('длинн') !== -1) {
+      return {
+        message: 'Сообщение слишком длинное (максимум 5000 символов).',
+        field: 'message',
+      };
+    }
+
+    if (lower.indexOf('минут') !== -1) {
+      return { message: 'Подождите минуту перед повторной отправкой.', field: null };
+    }
+
+    if (lower.indexOf('не настроена для сайта') !== -1) {
+      return {
+        message: 'Форма не настроена для этого сайта. Обратитесь к администратору.',
+        field: null,
+      };
+    }
+
+    if (lower.indexOf('ожидался json') !== -1) {
+      return {
+        message: 'Сервер формы не отвечает (ожидался JSON). Проверьте деплой на Render.',
+        field: null,
+      };
+    }
+
+    return { message: text || 'Не удалось отправить сообщение.', field: null };
+  }
+
   function readFields(form) {
     var fd = new FormData(form);
     return {
@@ -301,6 +364,8 @@
 
     if (!data.name) {
       errors.push({ message: 'Укажите, как к вам обращаться.', field: 'name' });
+    } else if (data.name.length > 120) {
+      errors.push({ message: 'Имя слишком длинное.', field: 'name' });
     }
     if (!isValidContactEmail(data.email)) {
       errors.push({ message: 'Укажите корректный email.', field: 'email' });
@@ -332,6 +397,7 @@
         source: window.location.hostname || 'ddt2024.am',
         subjectPrefix: subjectPrefix,
       }),
+      keepalive: true,
     });
 
     var payload = null;
@@ -352,10 +418,19 @@
 
   async function onSubmit(event) {
     event.preventDefault();
+    event.stopPropagation();
+    if (typeof event.stopImmediatePropagation === 'function') {
+      event.stopImmediatePropagation();
+    }
+
     var scrollX = window.scrollX;
     var scrollY = window.scrollY;
     var form = event.currentTarget;
     var submitBtn = getSubmitBtn(form);
+
+    if (form.dataset.contactSending === '1') {
+      return;
+    }
 
     try {
       var data = readFields(form);
@@ -383,6 +458,7 @@
 
       warmupEndpoint();
       clearFieldErrors(form);
+      form.dataset.contactSending = '1';
 
       if (submitBtn) {
         submitBtn.disabled = true;
@@ -404,16 +480,9 @@
         if (msg === 'Failed to fetch') {
           msg = 'Не удалось связаться с сервером формы. Попробуйте позже.';
         }
-        var errorField = null;
-        if (msg.indexOf('email') !== -1 || msg.indexOf('корректный') !== -1) {
-          errorField = 'email';
-        } else if (msg.indexOf('обращаться') !== -1) {
-          errorField = 'name';
-        } else if (msg.indexOf('Сообщение') !== -1) {
-          errorField = 'message';
-        }
-        showValidationErrors(form, [{ message: msg, field: errorField }]);
+        showValidationErrors(form, [mapServerError(msg)]);
       } finally {
+        form.dataset.contactSending = '0';
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.removeAttribute('aria-busy');
