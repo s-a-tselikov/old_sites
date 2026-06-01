@@ -1,0 +1,9 @@
+# Render Static Sites (Netlify-style redirects)
+/tarkovsky_rus /page33616426.html 200
+/tarkovsky_rus/ /page33616426.html 200
+/tarkovsky_arm /page34597342.html 200
+/tarkovsky_arm/ /page34597342.html 200
+/rus /page35133973.html 200
+/rus/ /page35133973.html 200
+/error404 /404.html 200
+/error404/ /404.html 200
