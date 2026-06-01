@@ -18,11 +18,28 @@ function sanitizeExportHtml(html) {
     .replace(/data-tilda-lazy="yes"/g, 'data-tilda-lazy="no"');
 }
 
+function applyTicketScroll(html) {
+  return html
+    .replace(
+      /<a name="tickets" style="font-size:0;"><\/a>/g,
+      '<span id="tickets" class="tickets-anchor" aria-hidden="true"></span>'
+    )
+    .replace(
+      '<script src="data/contact-config.js">',
+      '<style>#tickets,.tickets-anchor{display:block;height:0;scroll-margin-top:100px;}</style><script src="ticket-scroll.js"></script><script src="data/contact-config.js">'
+    );
+}
+
 const sources = ['index.html', 'english.html', 'georgian.html', '404.html'];
+const ticketScrollPages = new Set(['index.html', 'english.html']);
+
 for (const file of sources) {
   const filePath = path.join(root, file);
-  const sanitized = sanitizeExportHtml(fs.readFileSync(filePath, 'utf8'));
-  fs.writeFileSync(filePath, sanitized);
+  let html = sanitizeExportHtml(fs.readFileSync(filePath, 'utf8'));
+  if (ticketScrollPages.has(file)) {
+    html = applyTicketScroll(html);
+  }
+  fs.writeFileSync(filePath, html);
 }
 
 const routes = [
