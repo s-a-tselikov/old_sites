@@ -1,0 +1,29 @@
+ErrorDocument 403 /page33539444.html
+ErrorDocument 404 /page33539444.html
+
+DirectoryIndex page48247031.html
+
+RewriteEngine On
+
+RewriteCond %{HTTP:X-Forwarded-Proto} =http
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} /robots.txt
+RewriteCond "%{DOCUMENT_ROOT}/robots_%{HTTP_HOST}.txt" -f
+RewriteRule ^(.*)$ robots_%{HTTP_HOST}.txt [NC,L]
+RewriteRule ^jarmusch_rus$ page33538071.html [NC]
+RewriteRule ^jarmusch_rus/$ page33538071.html [NC]
+
+RewriteRule ^error404$ page33539444.html [NC]
+RewriteRule ^error404/$ page33539444.html [NC]
+
+RewriteRule ^jarmusch_arm$ page33568308.html [NC]
+RewriteRule ^jarmusch_arm/$ page33568308.html [NC]
+
+RewriteRule ^rus$ page34680912.html [NC]
+RewriteRule ^rus/$ page34680912.html [NC]
+
+RewriteRule ^arm$ page35394208.html [NC]
+RewriteRule ^arm/$ page35394208.html [NC]
+
+

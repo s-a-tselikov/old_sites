@@ -1,0 +1,11 @@
+# Render Static Sites (Netlify-style redirects)
+/jarmusch_rus      /page33538071.html    200
+/jarmusch_rus/     /page33538071.html    200
+/error404          /page33539444.html    200
+/error404/         /page33539444.html    200
+/jarmusch_arm      /page33568308.html    200
+/jarmusch_arm/     /page33568308.html    200
+/rus               /page34680912.html    200
+/rus/              /page34680912.html    200
+/arm               /page35394208.html    200
+/arm/              /page35394208.html    200
